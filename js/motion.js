@@ -62,21 +62,21 @@ function revealHeroGraphic() {
     animate(
       yellow,
       { y: ['180%', '0%'], rotate: [20, 0] },
-      { type: 'spring', stiffness: 85, damping: 15, mass: 1, delay: 0.1 }
+      { type: 'spring', stiffness: 85, damping: 15, mass: 1, delay: 0.07 }
     );
   }
   if (quarter) {
     animate(
       quarter,
       { y: ['-190%', '0%'], rotate: [-14, 0] },
-      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.24 }
+      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.17 }
     );
   }
   if (green) {
     animate(
       green,
       { x: ['-190%', '0%'], rotate: [-34, 0] },
-      { type: 'spring', stiffness: 75, damping: 15, mass: 1.2, delay: 0.38 }
+      { type: 'spring', stiffness: 75, damping: 15, mass: 1.2, delay: 0.27 }
     );
   }
   if (blue) {
@@ -85,18 +85,18 @@ function revealHeroGraphic() {
     animate(
       blue,
       { x: ['-240%', '0%'], y: ['110%', '0%'], rotate: [-300, 0] },
-      { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }
+      { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.35 }
     );
   }
   if (orange) {
     animate(
       orange,
       { x: ['210%', '0%'], rotate: [26, 0] },
-      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.66 }
+      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.46 }
     );
   }
   if (photo) {
-    animate(photo, { opacity: [0, 1] }, { duration: 0.7, ease: easeOut, delay: 0.95 });
+    animate(photo, { opacity: [0, 1] }, { duration: 0.55, ease: easeOut, delay: 0.65 });
   }
 }
 

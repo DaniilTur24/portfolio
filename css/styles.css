@@ -357,7 +357,7 @@ section h2 {
 
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 28px;
 }
 
@@ -380,6 +380,15 @@ section h2 {
   gap: 10px;
   background: var(--white);
   border-bottom: 1px solid var(--border);
+}
+
+.card-media-photo { padding: 0; }
+.card-media-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
 }
 
 .card-link .icon-arrow {
@@ -867,11 +876,13 @@ section h2 {
   box-shadow: 0 14px 30px rgba(28, 27, 24, 0.06);
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.wp-frame:hover {
-  position: relative;
-  z-index: 5;
-  transform: scale(1.25);
-  box-shadow: 0 34px 70px rgba(28, 27, 24, 0.24);
+@media (hover: hover) and (pointer: fine) {
+  .wp-frame:hover {
+    position: relative;
+    z-index: 5;
+    transform: scale(1.08);
+    box-shadow: 0 34px 70px rgba(28, 27, 24, 0.24);
+  }
 }
 .wp-topbar {
   display: flex;
@@ -1123,6 +1134,7 @@ body.lightbox-open { overflow: hidden; }
   }
 
   .hero { padding: 44px 0 56px; }
+  .hero-graphic { order: -1; }
   .selected-work, .what-i-do, .tech-capabilities { padding: 56px 0; }
   .cta { padding: 12px 0 64px; }
 
