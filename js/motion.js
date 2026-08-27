@@ -68,7 +68,7 @@ function workGridEntrance() {
 
 function revealHeadings() {
   const headings = document.querySelectorAll(
-    '.selected-work h2, .what-i-do h2, .why-work-heading h2, .tech-capabilities h2, .about-content h2, .cta-heading h2'
+    '.selected-work h2, .what-i-do h2, .tech-capabilities h2, .cta-heading h2'
   );
 
   headings.forEach((el) => {
@@ -124,27 +124,33 @@ function navIndicator() {
   });
 }
 
-function projectPageTransition() {
-  const links = document.querySelectorAll('.card-link[href]');
+/* Motion writes its animation state as inline styles. Chrome, Safari and
+   Firefox keep the whole document in the back/forward cache, so a page left
+   mid-animation comes back frozen in that state on "back". Wipe those inline
+   styles on a cached restore so the page is always shown in its final state. */
+const MOTION_TARGETS =
+  '#main, .work-card, .work-card .card-media, .hero-content h1 .line-inner, ' +
+  '.hero-content h2, .hero-content > p, .hero-actions .btn, ' +
+  '.why-work-heading .eyebrow, .cta-heading .eyebrow, ' +
+  '.selected-work h2, .what-i-do h2, .tech-capabilities h2, .cta-heading h2';
 
-  links.forEach((link) => {
-    const href = link.getAttribute('href');
-    if (!href || href.startsWith('#')) return;
+const MOTION_PROPS = ['opacity', 'transform', 'scale', 'rotate', 'translate', 'clip-path'];
 
-    link.addEventListener('click', (e) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      e.preventDefault();
+function clearInlineMotionStyles() {
+  document.querySelectorAll(MOTION_TARGETS).forEach((el) => {
+    const style = el.style;
+    for (let i = style.length - 1; i >= 0; i -= 1) {
+      const prop = style[i];
+      if (MOTION_PROPS.includes(prop) || prop.startsWith('--motion')) {
+        style.removeProperty(prop);
+      }
+    }
+  });
+}
 
-      const card = link.closest('.work-card');
-      const media = card ? card.querySelector('.card-media') : null;
-      const main = document.getElementById('main');
-
-      if (card) animate(card, { scale: 0.97 }, { duration: 0.3, ease: [0.4, 0, 0.2, 1] });
-      if (media) animate(media, { scale: 1.05 }, { duration: 0.34, ease: [0.4, 0, 0.2, 1] });
-      if (main) animate(main, { opacity: 0.5 }, { duration: 0.3, delay: 0.05 });
-
-      window.setTimeout(() => { window.location.href = href; }, 300);
-    });
+function restoreFromBfcache() {
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) clearInlineMotionStyles();
   });
 }
 
@@ -154,5 +160,5 @@ if (!prefersReducedMotion) {
   revealHeadings();
   workGridEntrance();
   navIndicator();
-  projectPageTransition();
+  restoreFromBfcache();
 }
