@@ -18,73 +18,86 @@ function revealHero() {
     );
   }
 
+  /* Each piece of the left column drifts in from its own side and settles
+     into place, echoing the way the shapes assemble on the right. */
   if (subhead) {
-    animate(subhead, { y: [22, 0], opacity: [0, 1] }, { type: 'spring', stiffness: 170, damping: 18, mass: 0.7, delay: 0.55 });
+    animate(
+      subhead,
+      { x: [64, 0], opacity: [0, 1] },
+      { type: 'spring', stiffness: 60, damping: 16, mass: 1, delay: 0.55 }
+    );
   }
 
   paras.forEach((p, i) => {
-    animate(p, { y: [16, 0], opacity: [0, 1] }, { type: 'spring', stiffness: 170, damping: 20, delay: 0.68 + i * 0.08 });
+    const fromLeft = i % 2 === 0;
+    animate(
+      p,
+      { x: [fromLeft ? -56 : 56, 0], opacity: [0, 1] },
+      { type: 'spring', stiffness: 60, damping: 17, mass: 1, delay: 0.85 + i * 0.22 }
+    );
   });
 
   actions.forEach((btn, i) => {
-    animate(btn, { y: [14, 0], opacity: [0, 1], scale: [0.94, 1] }, { type: 'spring', stiffness: 260, damping: 16, delay: 0.95 + i * 0.07 });
-  });
-}
-
-function revealEyebrows() {
-  const eyebrows = document.querySelectorAll('.why-work-heading .eyebrow, .cta-heading .eyebrow');
-
-  eyebrows.forEach((el) => {
-    const stop = inView(
-      el,
-      () => {
-        animate(el, { opacity: [0, 1], x: [-14, 0] }, { duration: 0.5, ease: easeOut });
-        stop();
-      },
-      { margin: '0px 0px -10% 0px' }
+    const fromLeft = i % 2 === 0;
+    animate(
+      btn,
+      { y: [36, 0], x: [fromLeft ? -30 : 30, 0], rotate: [fromLeft ? -7 : 7, 0], opacity: [0, 1], scale: [0.9, 1] },
+      { type: 'spring', stiffness: 65, damping: 14, mass: 1, delay: 1.4 + i * 0.18 }
     );
   });
 }
 
-function workGridEntrance() {
-  const grid = document.querySelector('.work-grid');
-  if (!grid) return;
-  const cards = grid.querySelectorAll('.work-card');
-  if (!cards.length) return;
+function revealHeroGraphic() {
+  const quarter = document.querySelector('.shape-quarter');
+  const green = document.querySelector('.shape-green');
+  const yellow = document.querySelector('.shape-yellow');
+  const blue = document.querySelector('.shape-blue');
+  const orange = document.querySelector('.shape-orange');
+  const photo = document.querySelector('.hero-photo');
 
-  const stop = inView(
-    grid,
-    () => {
-      animate(
-        cards,
-        { opacity: [0, 1], y: [30, 0], scale: [0.97, 1] },
-        { duration: 0.7, delay: stagger(0.1), ease: easeOut }
-      );
-      stop();
-    },
-    { margin: '0px 0px -10% 0px' }
-  );
-}
-
-function revealHeadings() {
-  const headings = document.querySelectorAll(
-    '.selected-work h2, .what-i-do h2, .tech-capabilities h2, .cta-heading h2'
-  );
-
-  headings.forEach((el) => {
-    const stop = inView(
-      el,
-      () => {
-        animate(
-          el,
-          { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'], y: [18, 0] },
-          { duration: 0.8, ease: easeOut }
-        );
-        stop();
-      },
-      { margin: '0px 0px -12% 0px' }
+  /* Each piece "rolls" or "drops" in from a different edge of the frame,
+     like Lego blocks clicking into their slot — springs give the little
+     overshoot/settle instead of a flat linear slide. Yellow leads the pack. */
+  if (yellow) {
+    animate(
+      yellow,
+      { y: ['180%', '0%'], rotate: [20, 0] },
+      { type: 'spring', stiffness: 85, damping: 15, mass: 1, delay: 0.1 }
     );
-  });
+  }
+  if (quarter) {
+    animate(
+      quarter,
+      { y: ['-190%', '0%'], rotate: [-14, 0] },
+      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.24 }
+    );
+  }
+  if (green) {
+    animate(
+      green,
+      { x: ['-190%', '0%'], rotate: [-34, 0] },
+      { type: 'spring', stiffness: 75, damping: 15, mass: 1.2, delay: 0.38 }
+    );
+  }
+  if (blue) {
+    /* the tumbleweed: rolls in edge-over-edge from off-screen, spinning
+       through multiple turns as it travels rather than sliding straight. */
+    animate(
+      blue,
+      { x: ['-240%', '0%'], y: ['110%', '0%'], rotate: [-300, 0] },
+      { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }
+    );
+  }
+  if (orange) {
+    animate(
+      orange,
+      { x: ['210%', '0%'], rotate: [26, 0] },
+      { type: 'spring', stiffness: 80, damping: 16, mass: 1.1, delay: 0.66 }
+    );
+  }
+  if (photo) {
+    animate(photo, { opacity: [0, 1] }, { duration: 0.7, ease: easeOut, delay: 0.95 });
+  }
 }
 
 function navIndicator() {
@@ -129,10 +142,8 @@ function navIndicator() {
    mid-animation comes back frozen in that state on "back". Wipe those inline
    styles on a cached restore so the page is always shown in its final state. */
 const MOTION_TARGETS =
-  '#main, .work-card, .work-card .card-media, .hero-content h1 .line-inner, ' +
-  '.hero-content h2, .hero-content > p, .hero-actions .btn, ' +
-  '.why-work-heading .eyebrow, .cta-heading .eyebrow, ' +
-  '.selected-work h2, .what-i-do h2, .tech-capabilities h2, .cta-heading h2';
+  '#main, .hero-content h1 .line-inner, .hero-content h2, .hero-content > p, ' +
+  '.hero-actions .btn, .hero-graphic .shape, .hero-photo';
 
 const MOTION_PROPS = ['opacity', 'transform', 'scale', 'rotate', 'translate', 'clip-path'];
 
@@ -156,9 +167,7 @@ function restoreFromBfcache() {
 
 if (!prefersReducedMotion) {
   revealHero();
-  revealEyebrows();
-  revealHeadings();
-  workGridEntrance();
+  revealHeroGraphic();
   navIndicator();
   restoreFromBfcache();
 }
