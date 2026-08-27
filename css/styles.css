@@ -696,6 +696,14 @@ section h2 {
   box-shadow: 0 26px 54px rgba(9, 20, 17, 0.35);
 }
 .case-shot.case-shot-dark { background: var(--green-dark); }
+.case-shot.case-shot-photo { padding: 0; overflow: hidden; }
+.case-shot.case-shot-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
+}
 
 .case-back {
   display: inline-flex;
@@ -876,7 +884,7 @@ section h2 {
   box-shadow: 0 14px 30px rgba(28, 27, 24, 0.06);
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (min-width: 1200px) {
   .wp-frame:hover {
     position: relative;
     z-index: 5;
@@ -928,6 +936,8 @@ section h2 {
 .shot-orders { object-position: top left; transform: scale(1.3); transform-origin: top left; }
 .shot-snippet { object-position: center center; transform: scale(1.15); transform-origin: center 46%; }
 .shot-products { object-position: top left; transform: scale(1.3); transform-origin: top left; }
+.shot-workflow { object-position: left center; transform: scale(1.1); transform-origin: left center; }
+.shot-ai-node { object-position: left top; transform: scale(1.15); transform-origin: left top; }
 
 .shot-zoom-hint {
   position: absolute;
