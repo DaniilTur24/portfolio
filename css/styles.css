@@ -1103,7 +1103,7 @@ body.lightbox-open { overflow: hidden; }
 /* Elements stay visible by default (no CDN/JS dependency for content to
    appear); motion.js supplies its own "from" keyframe when it animates in,
    so there's nothing to hide here and nothing to fall back from. */
-.hero-content h1 .line-mask { display: inline-block; overflow: hidden; }
+.hero-content h1 .line-mask { display: inline-block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .hero-content h1 .line-inner { display: inline-block; }
 
 /* ---------- Responsive ---------- */
