@@ -570,6 +570,146 @@ section h2 {
 .service-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
 .service-item p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.6; }
 
+/* --- What I Do: staged entrance ---------------------------------------
+   The whole section plays as one choreography the first time it scrolls
+   into view (the observer in js/main.js puts .in-view on the section):
+
+     1. the copy wipes open left-to-right, column after column;
+     2. the icons follow in the same order — each one rolls in from the
+        left, tipping edge over edge like a die and bouncing on every
+        landing before it settles upright in its slot.
+
+   The section carries plain `.reveal` purely as the trigger: that is the
+   hook js/main.js already watches, so the sequence arms itself with any
+   version of the script. `.anim-stage` down in the reveal block cancels
+   the section's own fade/slide — only the children move.
+
+   Nothing here animates until .in-view lands, so the section holds its
+   final layout (the icons keep their space) while the text plays. */
+.what-i-do.anim-stage { overflow-x: clip; }
+
+.what-i-do.anim-stage .wid-title,
+.what-i-do.anim-stage .service-item h3,
+.what-i-do.anim-stage .service-item p,
+.what-i-do.anim-stage .service-icon { opacity: 0; }
+
+/* Column index drives every delay below, so the two waves sweep across
+   the grid in the same left-to-right order. */
+.services-grid .service-item { --i: 0; }
+.services-grid .service-item:nth-child(2) { --i: 1; }
+.services-grid .service-item:nth-child(3) { --i: 2; }
+.services-grid .service-item:nth-child(4) { --i: 3; }
+
+/* Wave 1 — text uncovers from its left edge. */
+@keyframes wid-wipe {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-18px, 0, 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0); }
+}
+
+.what-i-do.anim-stage.in-view .wid-title {
+  animation: wid-wipe 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.what-i-do.anim-stage.in-view .service-item h3 {
+  animation: wid-wipe 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.26s + var(--i) * 0.1s);
+}
+.what-i-do.anim-stage.in-view .service-item p {
+  animation: wid-wipe 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.34s + var(--i) * 0.1s);
+}
+
+/* Wave 2 — the tumble. --roll is exactly four tile widths, so each of
+   the four quarter-turns covers one edge of the icon and the roll reads
+   as real contact with the ground instead of a spin-and-slide. Arcs get
+   lower as it goes, the way a real die loses height on every bounce.
+   Every keyframe repeats the same transform function list on purpose:
+   mixing lists would force matrix interpolation and the browser would
+   take the short way round instead of turning the full 360deg. */
+@keyframes wid-tumble {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--roll), 0, 0) rotate(-360deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  6% { opacity: 1; }
+  11% {
+    transform: translate3d(calc(var(--roll) * 0.875), -38px, 0) rotate(-315deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  20% {
+    transform: translate3d(calc(var(--roll) * 0.75), 0, 0) rotate(-270deg) scale(1.08, 0.9);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  24% {
+    transform: translate3d(calc(var(--roll) * 0.7), -14px, 0) rotate(-252deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1);
+  }
+  31% {
+    transform: translate3d(calc(var(--roll) * 0.625), -34px, 0) rotate(-225deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  40% {
+    transform: translate3d(calc(var(--roll) * 0.5), 0, 0) rotate(-180deg) scale(1.08, 0.9);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  44% {
+    transform: translate3d(calc(var(--roll) * 0.45), -13px, 0) rotate(-162deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1);
+  }
+  51% {
+    transform: translate3d(calc(var(--roll) * 0.375), -29px, 0) rotate(-135deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  60% {
+    transform: translate3d(calc(var(--roll) * 0.25), 0, 0) rotate(-90deg) scale(1.08, 0.9);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  64% {
+    transform: translate3d(calc(var(--roll) * 0.2), -11px, 0) rotate(-72deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1);
+  }
+  71% {
+    transform: translate3d(calc(var(--roll) * 0.125), -24px, 0) rotate(-45deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  80% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.1, 0.88);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  87% {
+    transform: translate3d(0, -12px, 0) rotate(0deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  94% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.05, 0.95);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1, 1);
+  }
+}
+
+.what-i-do.anim-stage.in-view .service-icon {
+  --roll: -208px;
+  transform-origin: 50% 100%;
+  animation: wid-tumble 1.15s linear both;
+  animation-delay: calc(0.95s + var(--i) * 0.13s);
+}
+
+/* Reduced motion: the global rule at the top of this file drops the
+   animations, so the staged elements need their finished state back. */
+@media (prefers-reduced-motion: reduce) {
+  .what-i-do.anim-stage .wid-title,
+  .what-i-do.anim-stage .service-item h3,
+  .what-i-do.anim-stage .service-item p,
+  .what-i-do.anim-stage .service-icon {
+    opacity: 1;
+    clip-path: none;
+    transform: none;
+  }
+}
+
 /* ---------- Technical Capabilities ---------- */
 .tech-capabilities { padding: 80px 0; border-top: 1px solid var(--border); }
 .tech-capabilities h2 { margin-bottom: 44px; }
@@ -599,6 +739,79 @@ section h2 {
 .tech-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
 .tech-skills { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.6; }
+
+/* --- Technical Toolkit: one card, then the rest out of it -------------
+   The first card drops into place and settles with a bounce, the same
+   language as the tumbling icons above. Once it is down, the other three
+   slide out from underneath it — right, then down, then diagonally —
+   growing to full size as they travel, so they read as being pulled out
+   of the first card rather than flying in from off-screen.
+
+   --dx/--dy is the offset from a card's own slot back to card 1's slot.
+   Grid items here are stretched to identical sizes at every breakpoint,
+   so "one card plus the 24px gap" is exactly one step of the grid and
+   the three of them start perfectly hidden behind card 1. */
+.tech-capabilities.anim-stage .tech-card { position: relative; opacity: 0; }
+/* Stacked in dealing order: every card slides out from under the ones
+   already placed, never across them. Only visible while they travel —
+   in the settled grid nothing overlaps. */
+.tech-capabilities.anim-stage .tech-card:nth-child(1) { z-index: 4; }
+.tech-capabilities.anim-stage .tech-card:nth-child(2) { z-index: 3; }
+.tech-capabilities.anim-stage .tech-card:nth-child(3) { z-index: 2; }
+.tech-capabilities.anim-stage .tech-card:nth-child(4) { z-index: 1; }
+
+.tech-grid .tech-card:nth-child(2) { --dx: calc(-100% - 24px); --dy: 0px; --d: 0.02s; }
+.tech-grid .tech-card:nth-child(3) { --dx: 0px; --dy: calc(-100% - 24px); --d: 0.14s; }
+.tech-grid .tech-card:nth-child(4) { --dx: calc(-100% - 24px); --dy: calc(-100% - 24px); --d: 0.26s; }
+
+/* The fall is deliberately unhurried — it carries the whole opening beat
+   of the section, so it comes from higher up and accelerates gently
+   rather than dropping in a blink. The bounce after it stays quick. */
+@keyframes tk-drop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -72px, 0) rotate(-1.6deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.75, 0.5);
+  }
+  26% { opacity: 1; }
+  60% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.015, 0.955);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.4, 1);
+  }
+  75% {
+    transform: translate3d(0, -11px, 0) rotate(0deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  89% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.01, 0.975);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.4, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1, 1);
+  }
+}
+
+@keyframes tk-emerge {
+  0% { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) scale(0.9); }
+  18% { opacity: 1; }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.tech-capabilities.anim-stage.in-view .tech-card:first-child {
+  animation: tk-drop 1.25s linear both;
+  animation-delay: 0.15s;
+}
+/* They leave as card 1 hits the ground, so the landing is what shakes
+   them loose instead of the sequence pausing between the two beats. */
+.tech-capabilities.anim-stage.in-view .tech-card:nth-child(n+2) {
+  animation: tk-emerge 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.9s + var(--d));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-capabilities.anim-stage .tech-card { opacity: 1; transform: none; }
+}
 
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag {
@@ -1099,6 +1312,15 @@ body.lightbox-open { overflow: hidden; }
 }
 .reveal.in-view { opacity: 1; transform: translateY(0); }
 
+/* A section that runs its own choreography wears `.reveal` only to get
+   picked up by the observer — it must not fade or slide itself. Sits
+   after `.reveal` on purpose: same specificity, later wins. */
+.anim-stage { opacity: 1; transform: none; transition: none; }
+
+/* Light stagger so cards in the same row settle in one after another
+   instead of popping in all at once. */
+.work-grid .work-card:nth-child(2) { transition-delay: 0.1s; }
+
 /* ---------- Motion entrance (animated in js/motion.js) ---------- */
 /* Elements stay visible by default (no CDN/JS dependency for content to
    appear); motion.js supplies its own "from" keyframe when it animates in,
@@ -1150,7 +1372,13 @@ body.lightbox-open { overflow: hidden; }
 
   .work-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr 1fr; gap: 30px 20px; }
+
+  /* One column: the toolkit cards stack, so each one comes out of the
+     card above rather than out of the one beside it. */
   .tech-grid { grid-template-columns: 1fr; }
+  .tech-grid .tech-card:nth-child(2) { --dx: 0px; --dy: calc(-100% - 24px); }
+  .tech-grid .tech-card:nth-child(3) { --dx: 0px; --dy: calc(-200% - 48px); }
+  .tech-grid .tech-card:nth-child(4) { --dx: 0px; --dy: calc(-300% - 72px); }
   .cta-box { padding: 36px 26px; }
   .section-header { margin-bottom: 28px; }
 }
